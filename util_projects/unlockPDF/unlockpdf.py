@@ -5,17 +5,17 @@ from tkinter import filedialog, messagebox
 
 def unlock_pdf(input_pdf, output_pdf, password):
     """
-    Desbloquea un archivo PDF protegido con contraseña y guarda una copia sin contraseña.
+    Unlock a PDF file protected with password and keep a copy without password.
 
-    :param input_pdf: Ruta del archivo PDF protegido.
-    :param output_pdf: Ruta donde se guardará el PDF sin contraseña.
-    :param password: Contraseña del archivo PDF.
+    : Param input_pdf: Protected PDF file.
+    : Param output_pdf: Route where the PDF will be stored without password.
+    : Param Password: PDF file password.
     """
     try:
         with open(input_pdf, 'rb') as infile:
             reader = PyPDF2.PdfReader(infile)
 
-            # Intentar descifrar con la contraseña
+            # Descifrar con la contraseña
             if reader.decrypt(password):
                 writer = PyPDF2.PdfWriter()
                 for page in reader.pages:
