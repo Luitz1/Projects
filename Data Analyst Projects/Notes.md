@@ -6,3 +6,7 @@ Abrir tu notebook
 Ctrl+Shift+P → "Python: Select Interpreter"
 Navegar a tu entorno virtual: ../tu-entorno/bin/python
 El kernel debería aparecer automáticamente
+
+
+# Clonar una vez esta establecida la conexion ssh repositorios Privados
+git clone git@github.com:Luitz1/DataAnalyst.git
