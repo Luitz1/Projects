@@ -15,6 +15,9 @@ The Notebook "1_example_weather" has a simple exploratory analysis, it is about 
 <a href="https://github.com/Luitz1/Projects/tree/main/Data%20Analyst%20Projects/2_exple_houses">Example Houses</a>
 The Notebook "2_exple_houses" has a simple exploratory analysis, it is about visualizing what type of information the dataset has, how some variables behave, what magnitudes and units are handled and very superficial things, and at the end a linear regression model is trained to make some predictions.
 
+<a href="https://github.com/Luitz1/Projects/tree/main/Data%20Analyst%20Projects/3_Climate_Analysis">Climate Analysis</a>
+Data analysis project structured with a modular and scalable design, focused on clarity, reusability, and efficiency. This template supports integration of multiple data sources, application of analytical models, and use of reusable scripts in an organized and reproducible workflow.
+
 </details>
 <details>
 <summary><b>Util Projects</b></summary>
