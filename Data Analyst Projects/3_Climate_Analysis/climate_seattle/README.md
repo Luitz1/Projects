@@ -5,7 +5,7 @@ Este repositorio contiene el desarrollo de un proyecto de análisis de datos est
 ---
 
 ## 🧱 Estructura del Proyecto
-
+<pre> '''text
 climate_seattle/
 ├── data/                       # Almacenamiento de datos
 │ │
@@ -50,7 +50,7 @@ climate_seattle/
 │
 ├── .gitignore                  # Exclusión de archivos no versionados
 └── README.md                   # Documentación principal del proyecto
-
+''' </pre>
 ## Flujo de Trabajo
 
 ![alt text](Diagram.png)
