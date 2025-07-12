@@ -23,10 +23,12 @@ climate_seattle/
 │ │ │
 │ │ └── 01_general_nb.ipynb
 │ │
-│ ├── 01_exploracion.ipynb
-│ ├── 02_preprocesamiento.ipynb
-│ ├── 03_modelado.ipynb
-│ └── 04_visualizacion.ipynb
+│ ├── 01_eda.ipynb
+│ ├── 02_preprocess.ipynb
+│ ├── 03_modeling.ipynb
+│ ├── 04_statistical_analysis.ipynb
+│ ├── 05_visualization.ipynb
+│ └── 06_report_conclusions.ipynb
 │
 ├── scripts/                    # Scripts Python reutilizables
 │ │
@@ -35,6 +37,7 @@ climate_seattle/
 │ ├── eda_scripts.py            # Funciones para ananlisis de datos
 │ ├── preprocess_scripts.py     # Funciones para limpieza y transformación
 │ ├── modeling_scripts.py       # Funciones de modelado de datos o entrenamiento de modelos
+│ ├── statistical_analysisscripts.py       # Funciones de modelado de datos o entrenamiento de modelos
 │ ├── visualization_scripts.py  # Funciones para visualizacion de datos
 │ └── paths.py                  # Paths disponibles
 │

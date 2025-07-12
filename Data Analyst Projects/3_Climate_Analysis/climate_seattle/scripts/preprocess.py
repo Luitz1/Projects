@@ -55,7 +55,7 @@ def identify_outliers(df, column, method='iqr', factor=1.5, z_threshold=3, show_
     """
 
     
-    # Verificaciones básicas
+    # Basic Visualizations
     if column not in df.columns:
         raise ValueError(f"La columna '{column}' no existe en el DataFrame")
     
@@ -65,7 +65,7 @@ def identify_outliers(df, column, method='iqr', factor=1.5, z_threshold=3, show_
     data = df[column].dropna()
     results = {}
     
-    # Método IQR
+    # IQR Method
     if method in ['iqr', 'both']:
         Q1 = data.quantile(0.25)
         Q3 = data.quantile(0.75)
@@ -83,7 +83,7 @@ def identify_outliers(df, column, method='iqr', factor=1.5, z_threshold=3, show_
             'outlier_values': df[iqr_outliers][column].tolist()
         }
     
-    # Método Z-Score
+    # Z-Score Method
     if method in ['zscore', 'both']:
         z_scores = np.abs(stats.zscore(data))
         zscore_mask = pd.Series(False, index=df.index)
@@ -97,7 +97,7 @@ def identify_outliers(df, column, method='iqr', factor=1.5, z_threshold=3, show_
             'outlier_values': df[zscore_mask][column].tolist()
         }
     
-    # Mostrar resumen
+    # Summary
     print(f"=== ANÁLISIS DE OUTLIERS: {column} ===")
     print(f"Total de datos: {len(df)}")
     print(f"Valores nulos: {df[column].isnull().sum()}")
@@ -115,11 +115,11 @@ def identify_outliers(df, column, method='iqr', factor=1.5, z_threshold=3, show_
             print(f"  Límites: ({result['bounds'][0]:.2f}, {result['bounds'][1]:.2f})")
         print()
     
-    # Visualizaciones
+    # Visualizations
     if show_plot:
         fig, axes = plt.subplots(1, 3, figsize=(15, 4))
         
-        # Histograma
+        # Histogram
         axes[0].hist(data, bins=30, alpha=0.7, edgecolor='black')
         axes[0].set_title(f'Histograma: {column}')
         axes[0].set_xlabel(column)
@@ -130,7 +130,7 @@ def identify_outliers(df, column, method='iqr', factor=1.5, z_threshold=3, show_
         axes[1].set_title(f'Boxplot: {column}')
         axes[1].set_ylabel(column)
         
-        # Scatter plot con outliers resaltados
+        # Scatter plot with outliers
         axes[2].scatter(range(len(df)), df[column], alpha=0.6, label='Normal')
         
         if method in ['iqr', 'both']:
@@ -216,31 +216,31 @@ def treat_outliers(df, column, outlier_mask, method='cap', custom_value=None, in
     print(f"Outliers a tratar: {outliers_count}")
     
     if method == 'remove':
-        # Eliminar filas con outliers
+        # Delete rows with outliers
         df = df[~outlier_mask]
         print(f"Filas eliminadas: {outliers_count}")
         
     elif method == 'cap':
-        # Limitar a percentiles 5 y 95
+        # Limit to 5th and 95th percentiles
         p5 = df[column].quantile(0.05)
         p95 = df[column].quantile(0.95)
         df.loc[outlier_mask, column] = df.loc[outlier_mask, column].clip(p5, p95)
         print(f"Valores limitados entre {p5:.2f} y {p95:.2f}")
         
     elif method == 'median':
-        # Reemplazar con la mediana
+        # Replace with the median
         median_val = df[column].median()
         df.loc[outlier_mask, column] = median_val
         print(f"Outliers reemplazados con mediana: {median_val:.2f}")
         
     elif method == 'mean':
-        # Reemplazar con la media (sin outliers)
+        # Replace with mean (no outliers)
         mean_val = df[~outlier_mask][column].mean()
         df.loc[outlier_mask, column] = mean_val
         print(f"Outliers reemplazados con media: {mean_val:.2f}")
         
     elif method == 'custom':
-        # Reemplazar con valor personalizado
+        # Replace with custom value
         if custom_value is None:
             raise ValueError("Debe proporcionar un valor personalizado")
         df.loc[outlier_mask, column] = custom_value
@@ -249,7 +249,7 @@ def treat_outliers(df, column, outlier_mask, method='cap', custom_value=None, in
     else:
         raise ValueError("Método no válido. Use: 'remove', 'cap', 'median', 'mean', 'custom'")
     
-    # Mostrar estadísticas después del tratamiento
+    # Show statistics after treatment
     print(f"\nEstadísticas después del tratamiento:")
     print(f"  Media: {df[column].mean():.2f}")
     print(f"  Mediana: {df[column].median():.2f}")
@@ -307,26 +307,26 @@ def quick_outlier_analysis(df, column, method='iqr', treatment='cap', show_compa
     """
 
 
-    # Identificar outliers
+    # Outliers
     outlier_results = identify_outliers(df, column, method=method)
     
-    # Usar la máscara del método seleccionado
+    # Use the mask of the selected method
     mask = outlier_results[method]['mask']
     
-    # Tratar outliers
+    # Treat outliers
     df_treated = treat_outliers(df, column, mask, method=treatment)
     
-    # Comparación visual
+    # Visual comparison
     if show_comparison and len(df_treated) > 0:
         fig, axes = plt.subplots(1, 2, figsize=(12, 4))
         
-        # Antes
+        # Before
         axes[0].hist(df[column].dropna(), bins=30, alpha=0.7, color='blue', edgecolor='black')
         axes[0].set_title(f'Antes del tratamiento\n{column}')
         axes[0].set_xlabel(column)
         axes[0].set_ylabel('Frecuencia')
         
-        # Después  
+        # After  
         axes[1].hist(df_treated[column].dropna(), bins=30, alpha=0.7, color='orange', edgecolor='black')
         axes[1].set_title(f'Después del tratamiento\n{column}')
         axes[1].set_xlabel(column)
