@@ -213,3 +213,65 @@ def boxplots_grapher(df: pd.DataFrame, figsize: list, suptitle: str, colors: lis
     # Adjust the layout to make room for the suptitle and prevent labels from overlapping
     plt.tight_layout(rect=[0, 0.03, 1, 0.95]) # [left, bottom, right, top] coordinates normalized to figure size
     plt.show()
+
+
+
+def corrmap_calc(df: pd.DataFrame, figsize: list=[8,8], title_graph: list = [False], 
+                 cbar: bool = True, annot:bool = True, n_decimal:float = 1 ,size_font: int = 10):
+    """
+    The function `corrmap_calc` generates a correlation heatmap for a given DataFrame with customizable
+    features such as figure size, title, color bar, annotation, and decimal precision.
+    
+    :param df: The `df` parameter is a pandas DataFrame that contains the data for which you want to
+    calculate and visualize the correlation matrix
+    :type df: pd.DataFrame
+    :param figsize: The `figsize` parameter in the `corrmap_calc` function is used to specify the
+    dimensions of the heatmap figure that will be created. It takes a list as input with two elements
+    representing the width and height of the figure. By default, the dimensions are set to [8, 8
+    :type figsize: list
+    :param title_graph: The `title_graph` parameter is used to specify whether to display a title on the
+    correlation heatmap graph and provide the title text and font size if it is set to `True`. It is a
+    list parameter with the following elements:
+    :type title_graph: list
+    :param cbar: The `cbar` parameter in the `corrmap_calc` function is a boolean flag that determines
+    whether to display the color bar alongside the correlation heatmap. If `cbar` is set to `True`, the
+    color bar will be shown; if set to `False`, the color bar will be, defaults to True
+    :type cbar: bool (optional)
+    :param annot: The `annot` parameter in the `corrmap_calc` function is used to specify whether to
+    display the correlation values on the heatmap. If `annot` is set to `True`, the correlation values
+    will be displayed on the heatmap; if set to `False`, the values will not be displayed, defaults to
+    True
+    :type annot: bool (optional)
+    :param n_decimal: The `n_decimal` parameter in the `corrmap_calc` function is used to specify the
+    number of decimal places to display in the annotations of the correlation heatmap. This parameter
+    allows you to control the precision of the correlation values shown in the heatmap. For example, if
+    `n_decimal=1`,, defaults to 1
+    :type n_decimal: float (optional)
+    :param size_font: The `size_font` parameter in the `corrmap_calc` function is used to specify the
+    font size for the annotations in the correlation heatmap. This parameter allows you to control the
+    size of the text displayed on the heatmap, making it easier to read and interpret the correlation
+    values between variables, defaults to 10
+    :type size_font: int (optional)
+    """
+                 
+    
+    corrmat = df.select_dtypes(include=['number']).corr()
+    k=10
+
+    cm = np.corrcoef(df[corrmat].values.T)
+    # Create the figure and a set of subplots
+    fig, ax = plt.subplots(figsize=(figsize[0], figsize[1]))
+
+    sns.set(font_scale=1.25)
+    hm = sns.heatmap(corrmat, 
+                    cbar = cbar,
+                    annot = annot,
+                    square = True,
+                    fmt = f".{n_decimal}f",
+                    annot_kws = {"size":size_font,},
+                    #title = title_graph,
+                    yticklabels = corrmat.columns,
+                    xticklabels = corrmat.columns)
+    
+    if title_graph[0] == True:
+        ax.set_title(title_graph[1], fontsize = title_graph[2])
