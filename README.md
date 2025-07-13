@@ -1,46 +1,108 @@
-# Personal Projects
-## Overview
-This repository contains personal projects that I am gradually uploading. Through each project, I not only showcase my work but also document my learning process as I explore and master different topics, techniques, and tools. It serves as a growing portfolio reflecting both my current skills and my ongoing development across areas like data analysis, automation, and electronics programming.
-## Repository Sections
+# 🚀 Personal Projects Portfolio
+
+![Last Commit](https://img.shields.io/github/last-commit/Luitz1/Projects)
+![Top Language](https://img.shields.io/github/languages/top/Luitz1/Projects)
+![License](https://img.shields.io/github/license/Luitz1/Projects)
+
+Welcome to my personal portfolio repository. Here, I showcase a collection of self-directed projects that demonstrate my skills in data analysis, automation, and electronics programming. Each project includes detailed documentation and reflects my learning process and technical growth.
+
+---
+
+## 📑 Table of Contents
+
+- [Quick Start](#-quick-start)
+- [Data Analyst Projects](#-data-analyst-projects)
+- [Util Projects](#-util-projects)
+- [Electronic Projects](#-electronic-projects)
+- [Contact & License](#-contact--license)
+
+---
+## 🚀 Quick Start
+```bash
+git clone https://github.com/Luitz1/Projects.git
+install requirements
+jupyter notebook 1_example_weather.ipynb
+```
+---
+
+## 📊 Data Analyst Projects
+
 <details>
-<summary><b>Data Analyst Projects</b></summary>
-This section contains projects focused on data manipulation, analysis, and modeling. You'll find Jupyter notebooks and Python scripts demonstrating, Data cleaning and preprocessing, Exploratory data analysis, Statistical analysis and hypothesis testing, Data visualization an others projects of Data.
+<summary><strong>Click to expand</strong></summary>
 
-### Projects:
-<!-- Projects will be listed here with links -->
+Projects focused on data manipulation, statistical modeling, and visualization. Includes notebooks and scripts showcasing:
 
-<a href="https://github.com/Luitz1/Projects/tree/main/Data%20Analyst%20Projects/1_example_weather">Example Weather</a>
-The Notebook "1_example_weather" has a simple exploratory analysis, it is about visualizing what type of information the dataset has, how some variables behave, what magnitudes and units are handled and very superficial things.
+- Data cleaning & preprocessing  
+- Exploratory data analysis (EDA)  
+- Statistical analysis and hypothesis testing  
+- Predictive modeling & visualizations  
 
-<a href="https://github.com/Luitz1/Projects/tree/main/Data%20Analyst%20Projects/2_exple_houses">Example Houses</a>
-The Notebook "2_exple_houses" has a simple exploratory analysis, it is about visualizing what type of information the dataset has, how some variables behave, what magnitudes and units are handled and very superficial things, and at the end a linear regression model is trained to make some predictions.
+### Projects
 
-<a href="https://github.com/Luitz1/Projects/tree/main/Data%20Analyst%20Projects/3_Climate_Analysis">Climate Analysis</a>
-Data analysis project structured with a modular and scalable design, focused on clarity, reusability, and efficiency. This template supports integration of multiple data sources, application of analytical models, and use of reusable scripts in an organized and reproducible workflow.
+- 🔗 [**Example Weather**](https://github.com/Luitz1/Projects/tree/main/Data%20Analyst%20Projects/1_example_weather)  
+  Basic exploratory analysis of a weather dataset: variable behavior, units, and distributions.
+
+- 🔗 [**Example Houses**](https://github.com/Luitz1/Projects/tree/main/Data%20Analyst%20Projects/2_exple_houses)  
+  EDA plus linear regression to predict housing prices.
+
+- 🔗 [**Climate Analysis**](https://github.com/Luitz1/Projects/tree/main/Data%20Analyst%20Projects/3_Climate_Analysis)  
+  Scalable and modular data analysis template using reusable scripts and multiple sources.
+
+**Tech Stack:** Python, pandas, matplotlib, seaborn, scikit-learn
 
 </details>
+
+---
+
+## ⚙️ Util Projects
+
 <details>
-<summary><b>Util Projects</b></summary>
-This section includes Python scripts designed to automate everyday tasks and solve specific problems. These utility programs demonstrate my ability to create practical solutions for Process automation, Data extraction and transformation, File management and other useful actions in everyday life.
+<summary><strong>Click to expand</strong></summary>
 
-Projects:
-<!-- Projects will be listed here with links -->
+Automation scripts for daily tasks, showcasing practical Python solutions for:
 
-<a href="https://github.com/Luitz1/Projects/tree/main/util_projects/img_to_pdf">Image to PDF</a>
-The python script "img_to_pdf" helps to convert one or more images arranged in a specific folder called IN and make a PDF file and leave it in the OUT folder.
+- File and PDF handling  
+- Data transformation  
+- Folder management and workflows  
 
-<a href="https://github.com/Luitz1/Projects/tree/main/util_projects/unlockPDF">Unlock PDF Documents</a>
-This Python script "unlockPDF" allows you to unlock a PDF file with a password, that is, having the file and its password, a new unlocked PDF file is generated.
+### Projects
+
+- 🔗 [**Image to PDF**](https://github.com/Luitz1/Projects/tree/main/util_projects/img_to_pdf)  
+  Converts images in an `IN` folder to a single PDF in the `OUT` folder.
+
+- 🔗 [**Unlock PDF**](https://github.com/Luitz1/Projects/tree/main/util_projects/unlockPDF)  
+  Unlocks password-protected PDF files and exports an unrestricted version.
+
+**Tech Stack:** Python, PIL, PyPDF2
 
 </details>
+
+---
+
+## 🔌 Electronic Projects
+
 <details>
-<summary><b>Electronic Projects</b></summary>
-This section showcases programming projects related to electronics and hardware integration, including Arduino microcontroller programming, ESP32 development, Robotics control systems, Sensor integration and IoT applications.
+<summary><strong>Click to expand</strong></summary>
 
-Projects:
-<!-- Projects will be listed here with links -->
+Embedded systems and hardware-related projects using:
 
-<a href="https://github.com/Luitz1/Projects/tree/main/Electronic_Projects/KeyBoard_with_Leonardo">Keyboard with Arduino Leonardo</a>
-This project aims to make a "keyboard" with Arduino Leonardo, this has the function of acting as a Rubber Duck. It contains two relatively simple codes, the first in extension (. ino) for Arduino IDE and the second in (. C) to use with PlatformIO or another compiler.
+- Arduino / ESP32 microcontrollers  
+- HID emulation  
+- Sensor integration  
+- IoT and robotics  
+
+### Projects
+
+- 🔗 [**Keyboard with Arduino Leonardo**](https://github.com/Luitz1/Projects/tree/main/Electronic_Projects/KeyBoard_with_Leonardo))  
+  Turns an Arduino Leonardo into a programmable keyboard (Rubber Ducky style), using `.ino` and `.c` code.
+
+**Tech Stack:** Arduino IDE, C/C++, PlatformIO
 
 </details>
+
+---
+
+## 📬 Contact & License
+
+📫 Feel free to reach out via [LinkedIn](https://github.com/Luitz1) or open an issue.
+
