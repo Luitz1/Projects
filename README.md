@@ -1,4 +1,4 @@
-# 🚀 Personal Projects Portfolio
+# Personal Projects Portfolio
 
 ![Last Commit](https://img.shields.io/github/last-commit/Luitz1/Projects)
 ![Top Language](https://img.shields.io/github/languages/top/Luitz1/Projects)
@@ -79,7 +79,7 @@ Automation scripts for daily tasks, showcasing practical Python solutions for:
 
 ---
 
-## 🔌 Electronic Projects
+## ⚡ Electronic Projects
 
 <details>
 <summary><strong>Click to expand</strong></summary>
@@ -102,7 +102,7 @@ Embedded systems and hardware-related projects using:
 
 ---
 
-## 📬 Contact & License
+## Contact
 
 📫 Feel free to reach out via [LinkedIn](https://github.com/Luitz1) or open an issue.
 
