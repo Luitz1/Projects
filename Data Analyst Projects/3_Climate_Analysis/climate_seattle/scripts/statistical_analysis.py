@@ -1,8 +1,17 @@
 import pandas as pd
 import numpy as np
 from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
 import warnings
 warnings.filterwarnings('ignore')
+plt.style.use('seaborn-v0_8')
+sns.set_palette("husl")
+
+
+
+
+
 
 def descriptive_statistics(df):
     """
@@ -208,3 +217,234 @@ def interpret_statistics(df):
         interpretaciones[columna] = "; ".join(interpretacion)
     
     return interpretaciones
+
+
+
+
+
+
+
+
+
+
+def anova_test(df, numeric_var, categorical_var):
+    """
+    EN:
+    Perform complete ANOVA analysis with explanatory visualizations.
+    
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        DataFrame with data
+    numeric_var : str
+        Numeric variable name (dependent)
+    categorical_var : str
+        Categorical variable name (independent)
+    
+    Returns:
+    --------
+    dict
+        Dictionary with ANOVA results
+
+        
+    ES:
+    Realiza análisis ANOVA completo con visualizaciones explicativas.
+    
+    Parámetros:
+    -----------
+    df : pandas.DataFrame
+        DataFrame con los datos
+    numeric_var : str
+        Nombre de variable numérica (dependiente)
+    categorical_var : str
+        Nombre de variable categórica (independiente)
+    
+    Retorna:
+    --------
+    dict
+        Diccionario con resultados del ANOVA
+
+    """
+    
+    print("="*60)
+    print(f"ANÁLISIS ANOVA: {numeric_var} vs {categorical_var}")
+    print("="*60)
+    
+    # Prepare data groups
+    groups = []
+    categories = df[categorical_var].unique()
+    
+    for category in categories:
+        group = df[df[categorical_var] == category][numeric_var]
+        groups.append(group)
+    
+    # Descriptive statistics by group
+    print("\n📊 ESTADÍSTICAS DESCRIPTIVAS POR GRUPO:")
+    print("-" * 50)
+    
+    descriptive_stats = df.groupby(categorical_var)[numeric_var].agg([
+        'count', 'mean', 'median', 'std', 'min', 'max'
+    ]).round(4)
+    
+    print(descriptive_stats)
+    
+    # Perform ANOVA
+    print(f"\n🔍 PRUEBA ANOVA DE UNA VÍA:")
+    print("-" * 50)
+    
+    f_stat, p_val = stats.f_oneway(*groups)
+    
+    print(f"Estadístico F: {f_stat:.4f}")
+    print(f"p-value: {p_val:.4f}")
+    
+    # Interpretation
+    alpha = 0.05
+    print(f"\nInterpretación (α = {alpha}):")
+    if p_val < alpha:
+        print("✅ RECHAZAMOS H₀: Hay diferencias significativas entre grupos")
+        print("   Las medias de los grupos son estadísticamente diferentes")
+    else:
+        print("❌ NO RECHAZAMOS H₀: No hay diferencias significativas entre grupos")
+        print("   Las medias de los grupos son estadísticamente similares")
+    
+    # Check assumptions
+    print(f"\n🔧 VERIFICACIÓN DE SUPUESTOS:")
+    print("-" * 50)
+    
+    # Normality test for each group
+    print("1. Normalidad por grupo:")
+    for i, category in enumerate(categories):
+        group = groups[i]
+        if len(group) < 5000:  # Shapiro-Wilk limitations with large samples
+            _, p_norm = stats.shapiro(group)
+            print(f"   {category}: p = {p_norm:.4f} {'✅' if p_norm > 0.05 else '❌'}")
+    
+    # Homoscedasticity test
+    _, p_levene = stats.levene(*groups)
+    print(f"2. Homocedasticidad (Levene): p = {p_levene:.4f} {'✅' if p_levene > 0.05 else '❌'}")
+    
+    # Effect size calculation (Eta squared)
+    grand_mean = df[numeric_var].mean()
+    ss_between = sum([len(group) * (group.mean() - grand_mean)**2 for group in groups])
+    ss_total = sum([(x - grand_mean)**2 for x in df[numeric_var]])
+    eta_squared = ss_between / ss_total
+    
+    print(f"\n📏 TAMAÑO DEL EFECTO:")
+    print("-" * 50)
+    print(f"Eta² = {eta_squared:.4f}")
+    
+    if eta_squared < 0.01:
+        effect_size = "Muy pequeño"
+    elif eta_squared < 0.06:
+        effect_size = "Pequeño"
+    elif eta_squared < 0.14:
+        effect_size = "Moderado"
+    else:
+        effect_size = "Grande"
+    
+    print(f"Interpretación: {effect_size}")
+    
+    # Create visualizations
+    create_anova_plots(df, numeric_var, categorical_var)
+    
+    # Return results
+    return {
+        'f_statistic': f_stat,
+        'p_value': p_val,
+        'eta_squared': eta_squared,
+        'group_stats': descriptive_stats,
+        'significant': p_val < alpha
+    }
+
+def create_anova_plots(df, num_var, cat_var):
+    """
+    EN:
+
+    Create explanatory visualizations for ANOVA analysis.
+
+    ES:
+    
+    Crea visualizaciones explicativas para el análisis ANOVA.
+
+    """
+    
+    # Set up subplots
+    fig, axes = plt.subplots(2, 2, figsize=(15, 12))
+    fig.suptitle(f'Análisis ANOVA: {num_var} vs {cat_var}', fontsize=16, fontweight='bold')
+    
+    # Box plot
+    sns.boxplot(data=df, x=cat_var, y=num_var, ax=axes[0,0])
+    axes[0,0].set_title('Box Plot - Distribución por Grupo')
+    axes[0,0].tick_params(axis='x', rotation=45)
+    
+    # Violin plot
+    sns.violinplot(data=df, x=cat_var, y=num_var, ax=axes[0,1])
+    axes[0,1].set_title('Violin Plot - Densidad por Grupo')
+    axes[0,1].tick_params(axis='x', rotation=45)
+    
+    # Overlapping histograms
+    for category in df[cat_var].unique():
+        data = df[df[cat_var] == category][num_var]
+        axes[1,0].hist(data, alpha=0.7, label=category, bins=20)
+    
+    axes[1,0].set_title('Histogramas Superpuestos')
+    axes[1,0].set_xlabel(num_var)
+    axes[1,0].set_ylabel('Frecuencia')
+    axes[1,0].legend()
+    
+    # Means with confidence intervals
+    means = df.groupby(cat_var)[num_var].mean()
+    errors = df.groupby(cat_var)[num_var].sem() * 1.96  # 95% CI
+    
+    x_pos = range(len(means))
+    axes[1,1].bar(x_pos, means, yerr=errors, capsize=5, alpha=0.7)
+    axes[1,1].set_title('Medias con Intervalos de Confianza 95%')
+    axes[1,1].set_xlabel(cat_var)
+    axes[1,1].set_ylabel(f'Media de {num_var}')
+    axes[1,1].set_xticks(x_pos)
+    axes[1,1].set_xticklabels(means.index, rotation=45)
+    
+    # Adjust layout
+    plt.tight_layout()
+    plt.show()
+
+def posthoc_test(df, numeric_var, categorical_var):
+    """
+    EN:
+    Perform post-hoc analysis (Tukey HSD) if ANOVA is significant.
+
+    ES:
+    Realiza análisis post-hoc (Tukey HSD) si el ANOVA es significativo.
+    """
+    from scipy.stats import tukey_hsd
+    
+    print("\n🔍 ANÁLISIS POST-HOC (Tukey HSD):")
+    print("-" * 50)
+    
+    # Prepare data for Tukey HSD
+    groups = []
+    categories = df[categorical_var].unique()
+    
+    for category in categories:
+        group = df[df[categorical_var] == category][numeric_var]
+        groups.append(group)
+    
+    # Perform Tukey HSD
+    try:
+        tukey_result = tukey_hsd(*groups)
+        
+        print("Comparaciones pareadas:")
+        print(f"{'Grupo 1':<15} {'Grupo 2':<15} {'Diferencia':<12} {'p-value':<10} {'Significativo'}")
+        print("-" * 70)
+        
+        for i in range(len(categories)):
+            for j in range(i+1, len(categories)):
+                p_val = tukey_result.pvalue[i, j]
+                diff = abs(groups[i].mean() - groups[j].mean())
+                sig = "✅" if p_val < 0.05 else "❌"
+                
+                print(f"{categories[i]:<15} {categories[j]:<15} {diff:<12.4f} {p_val:<10.4f} {sig}")
+    
+    except Exception as e:
+        print(f"Error en análisis post-hoc: {e}")
+        print("Usar otros métodos como Bonferroni o t-tests pareados")
