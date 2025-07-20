@@ -275,3 +275,110 @@ def corrmap_calc(df: pd.DataFrame, figsize: list=[8,8], title_graph: list = [Fal
     
     if title_graph[0] == True:
         ax.set_title(title_graph[1], fontsize = title_graph[2])
+
+
+
+
+
+def barplot_grapher(df, numerical_columns, subplot_shape:list=[2, 2], figsize=[9,6],
+                    x_var:str="", y_vars=None, hue ="", title_prefix:str="", 
+                    wspace=0.3, hspace=0.4, legend_title:str=""):
+    """
+    EN:
+    Plot multiple barplots of numerical variables in a grid layout (English)
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        Data
+        import matplotlib.pyplot as plt
+import seaborn as snsFrame containing the data.
+    numerical_columns : list of str
+        List of numerical variable names to plot.
+    subplot_shape : list, default [2, 2]
+        Shape of the subplot grid [rows, cols].
+    figsize : list, default [9, 6]
+        Size of the entire figure [width, height].
+    x : str, default "year"
+        Column to use for the x-axis.
+    y_vars : list of str, optional
+        List of variables to use for y-axis (defaults to numerical_columns).
+    hue : str, default "month"
+        Column to use as hue for color grouping.
+    title_prefix : str, default "Monthly"
+        Prefix to use for subplot titles.
+    wspace : float, default 0.3
+        Horizontal spacing between plots.
+    hspace : float, default 0.4
+        Vertical spacing between plots.
+    legend_title : str, default "Months"
+        Title of the shared legend.
+
+    Returns:
+    --------
+    None. Displays the plot.
+
+    
+
+    ES:
+
+    Traza múltiples barplots de variables numéricas en una cuadrícula (Español)
+
+    Parámetros:
+    -----------
+    df : pandas.DataFrame
+        DataFrame con los datos.
+    numerical_columns : list of str
+        Lista de nombres de variables numéricas a graficar.
+    subplot_shape : list, por defecto [2, 2]
+        Forma de la cuadrícula de subplots [filas, columnas].
+    figsize : list, por defecto [9, 6]
+        Tamaño total de la figura [ancho, alto].
+    x : str, por defecto "year"
+        Columna usada para el eje x.
+    y_vars : list of str, opcional
+        Lista de variables a usar para el eje y (por defecto igual a numerical_columns).
+    hue : str, por defecto "month"
+        Columna usada como hue para agrupar por color.
+    title_prefix : str, por defecto "Monthly"
+        Prefijo usado en los títulos de los subgráficos.
+    wspace : float, por defecto 0.3
+        Espacio horizontal entre gráficos.
+    hspace : float, por defecto 0.4
+        Espacio vertical entre gráficos.
+    legend_title : str, por defecto "Months"
+        Título de la leyenda compartida.
+
+    Retorna:
+    --------
+    None. Muestra el gráfico.
+    """
+    rows, cols = subplot_shape
+    fig, ax = plt.subplots(rows, cols, figsize=figsize)
+    ax = ax.flatten()
+
+    if y_vars is None:
+        y_vars = numerical_columns
+
+    handles, labels = [], []
+
+    for idx, var in enumerate(y_vars):
+        if hue != None:
+            sns.barplot(data=df, ax=ax[idx], x=x_var, y=var, hue=hue, palette="Set2")
+            ax[idx].legend_.remove()
+        else:
+            sns.barplot(data=df, ax=ax[idx], x=x_var, y=var, palette="Set2")
+        ax[idx].set_title(f"{title_prefix} {var}")
+
+        if idx == 0:
+            handles, labels = ax[idx].get_legend_handles_labels()
+        
+
+    plt.subplots_adjust(wspace=wspace, hspace=hspace)
+    if hue != None:
+        fig.legend(handles, labels, title=legend_title,
+                    loc='center right', bbox_to_anchor=(1.05, 0.5), ncol=1)
+
+    plt.tight_layout(rect=[0, 0, 0.95, 1])
+    plt.show()
+
