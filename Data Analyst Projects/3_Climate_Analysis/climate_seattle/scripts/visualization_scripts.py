@@ -3,6 +3,9 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 import seaborn as sns 
+import calendar
+from statsmodels.tsa.seasonal import seasonal_decompose
+
 
 
 def distribution_grapher(df_temp: pd.DataFrame, subplot_dims: list, figsize: list, suptitle: str):
@@ -78,7 +81,6 @@ def distribution_grapher(df_temp: pd.DataFrame, subplot_dims: list, figsize: lis
 
 
 
-
 def qq_grapher(df: pd.DataFrame, subplot_dims: list, figsize: list, suptitle: str):
     """
     EN:
@@ -134,7 +136,6 @@ def qq_grapher(df: pd.DataFrame, subplot_dims: list, figsize: list, suptitle: st
     # Adjust the overall layout to make room for the suptitle
     plt.tight_layout(rect=[0, 0.03, 1, 0.95]) # [left, bottom, right, top]
     plt.show()
-
 
 
 
@@ -278,8 +279,6 @@ def corrmap_calc(df: pd.DataFrame, figsize: list=[8,8], title_graph: list = [Fal
 
 
 
-
-
 def barplot_grapher(df, numerical_columns, subplot_shape:list=[2, 2], figsize=[9,6],
                     x_var:str="", y_vars=None, hue ="", title_prefix:str="", 
                     wspace=0.3, hspace=0.4, legend_title:str=""):
@@ -382,3 +381,132 @@ import seaborn as snsFrame containing the data.
     plt.tight_layout(rect=[0, 0, 0.95, 1])
     plt.show()
 
+
+
+def heatmap_grapher(df,
+                        row_dim,
+                        col_dim,
+                        value_col,
+                        figsize=[10, 4],
+                        n_decimal=0,
+                        font_size=10,
+                        aggfunc='sum',
+                        xlabel='',
+                        ylabel='',
+                        title='Heatmap'):
+
+    """
+    EN:
+    Plots a heatmap using an aggregated matrix of values based on two categorical or temporal dimensions.
+    Useful for summarizing data distributions such as Month-Year, Region-Category, etc.
+
+    Parameters:
+    - df: DataFrame with input data.
+    - row_dim: Column to use as row index (Y-axis) in the heatmap.
+    - col_dim: Column to use as column index (X-axis).
+    - value_col: Column containing the numeric values to aggregate (sum).
+    - figsize: List defining [width, height] of the plot.
+    - aggfunc: Aggregation function ('sum', 'mean', 'median', 'count', etc.).
+    - n_decimal: Number of decimal places to show in each cell.
+    - font_size: Size of text annotations inside each cell.
+
+    - xlabel, ylabel: Axis labels for the plot.
+    - title: Plot title.
+
+    ES:
+    Traza un mapa de calor usando una matriz agregada de valores basada en dos dimensiones categóricas o temporales.
+    Útil para resumir distribuciones como Mes-Año, Región-Categoría, etc.
+
+    Parámetros:
+    - df: DataFrame con los datos de entrada.
+    - row_dim: Columna que se usará como índice de fila (eje Y) del heatmap.
+    - col_dim: Columna que se usará como índice de columna (eje X).
+    - value_col: Columna con los valores numéricos a agregar (suma).
+    - figsize: Lista que define el tamaño de la figura [ancho, alto].
+    - n_decimal: Cantidad de decimales a mostrar en cada celda.
+    - font_size: Tamaño del texto dentro de cada celda.
+    - aggfunc: Función de agregación ('sum', 'mean', 'median', 'count', etc.).
+    - xlabel, ylabel: Etiquetas de los ejes.
+    - title: Título del gráfico.
+    """
+
+    # Aggregating data: sum of values per combination of row and column dimensions
+    grouped = df.groupby([row_dim, col_dim])[value_col].agg(aggfunc).reset_index()
+
+    # Pivoting to matrix format
+    pivot = grouped.pivot(index=row_dim, columns=col_dim, values=value_col)
+
+    # If columns are numeric months, map them to short names
+    if pivot.columns.dtype in ['int64', 'int32'] and all(1 <= x <= 12 for x in pivot.columns):
+        pivot.columns = [calendar.month_abbr[m] for m in pivot.columns]
+
+    # Generate heatmap
+    plt.figure(figsize=figsize)
+    sns.heatmap(
+        pivot,
+        cmap='YlGnBu',
+        cbar=True,
+        annot=True,
+        fmt=f".{n_decimal}f",
+        annot_kws={"size": font_size},
+        linewidths=.5,
+        square=True
+    )
+
+    # Add plot metadata
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.tight_layout()
+    plt.show()
+
+
+
+def seasonal_decomp_grapher(df, date_col, value_col, freq, model='additive', figsize=(9, 5)):
+    """
+    EN:
+    Performs and plots seasonal decomposition (trend, seasonality, residual) of a time series.
+    
+    Parameters:
+    - df: DataFrame with time series data
+    - date_col: Column containing datetime information
+    - value_col: Column to decompose
+    - freq: Frequency of the data (e.g., 12 for monthly, 7 for weekly)
+    - model: 'additive' or 'multiplicative'
+    - figsize: Figure size of the plots
+    
+    ES:
+    Realiza y grafica la descomposición estacional (tendencia, estacionalidad, residuo) de una serie temporal.
+
+    Parámetros: 
+    - df: DataFrame con datos de series de tiempo 
+    - date_col: columna que contiene información de fecha
+    - value_col: columna para descomponer 
+    - freq: frecuencia de los datos (por ejemplo, 12 para mensualmente, 7 para semanalmente) 
+    - model: 'aditivo' o 'multiplicativo' 
+    - figsize: tamaño de la figura de las graficas
+
+    """
+
+    # Ensure date column is datetime and set as index
+    ts = df.copy()
+    ts[date_col] = pd.to_datetime(ts[date_col])
+    ts = ts.set_index(date_col).sort_index()
+
+    # Interpolate missing values if necessary
+    ts[value_col] = ts[value_col].interpolate()
+
+    # Perform decomposition
+    decomposition = seasonal_decompose(ts[value_col], model=model, period=freq)
+
+    # Plotting components
+    fig, axes = plt.subplots(4, 1, figsize=figsize, sharex=True)
+    decomposition.observed.plot(ax=axes[0], legend=False, title='Observed')
+    decomposition.trend.plot(ax=axes[1], legend=False, title='Trend')
+    decomposition.seasonal.plot(ax=axes[2], legend=False, title='Seasonality')
+    decomposition.resid.plot(ax=axes[3], legend=False, title='Residual')
+
+    axes[0].set_ylabel(value_col)
+    plt.suptitle(f'Seasonal Decomposition of {value_col} ({model})', fontsize=14)
+    plt.tight_layout(rect=[0, 0, 1, 0.96])
+    plt.show()
