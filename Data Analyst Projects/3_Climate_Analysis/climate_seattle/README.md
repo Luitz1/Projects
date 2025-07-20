@@ -12,6 +12,7 @@ climate_seattle/
 │ ├── raw/                      # Datos originales sin procesar
 │ │   └── seattle-weather.csv
 │ ├── processed/                # Datos limpios y listos para análisis
+│ │   └── preprocess_data.csv
 │ ├── external/                 # Datos de fuentes externas (API, descargas públicas)
 │ └── README.md                 # Descripción de las fuentes y diccionarios de datos
 │
@@ -25,9 +26,9 @@ climate_seattle/
 │ │
 │ ├── 01_eda.ipynb
 │ ├── 02_preprocess.ipynb
-│ ├── 03_modeling.ipynb
-│ ├── 04_statistical_analysis.ipynb
-│ ├── 05_visualization.ipynb
+│ ├── 03_statistical_analysis.ipynb
+│ ├── 04_time_analysis.ipynb
+│ ├── 05_modeling.ipynb
 │ └── 06_report_conclusions.ipynb
 │
 ├── scripts/                    # Scripts Python reutilizables
@@ -37,7 +38,7 @@ climate_seattle/
 │ ├── eda_scripts.py            # Funciones para ananlisis de datos
 │ ├── preprocess_scripts.py     # Funciones para limpieza y transformación
 │ ├── modeling_scripts.py       # Funciones de modelado de datos o entrenamiento de modelos
-│ ├── statistical_analysisscripts.py       # Funciones de modelado de datos o entrenamiento de modelos
+│ ├── stat_analysis_scripts.py  # Funciones de analisis de datos.
 │ ├── visualization_scripts.py  # Funciones para visualizacion de datos
 │ └── paths.py                  # Paths disponibles
 │
